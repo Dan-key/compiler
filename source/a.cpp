@@ -588,6 +588,7 @@ int main(){
     //     }
     //     std::cout<<'\n';
     // }
+    int reuirbwe=  0;
     file.close();
     output_file.close();
 }
