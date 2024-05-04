@@ -15,7 +15,7 @@ _start:
 
 
 	pop rax
-	mov rdx, 246 
+	mov rdx, 24 
 	imul rdx
 	push rax
 

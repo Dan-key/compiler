@@ -1,2 +1,2 @@
-g++ $1.cpp
+g++ source/$1.cpp
 ./a.out

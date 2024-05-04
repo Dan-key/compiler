@@ -1,6 +1,6 @@
 #! /bin/sh
 
-nasm -f elf64 $1.asm -o $1.o
+nasm -f elf64 source/$1.asm -o $1.o
 
 if [ $? -ne 0 ];  then
     echo "Not compiling $1"
