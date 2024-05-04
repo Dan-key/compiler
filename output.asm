@@ -5,23 +5,16 @@ section .data
 section .text
 _start:
 	push rax
+	mov rax, 0
+	mov [x0], rax
+	pop rax
+
+	push rax
 	push rbx
 	push rdx
 
-	mov rax, 0 
-	mov rdx, 567 
-	add rax, rdx
-	push rax
-
-
 	pop rax
-	mov rdx, 24 
-	imul rdx
-	push rax
-
-
-	pop rax
-	mov [x0], rax
+	mov [while0], rax
 
 	pop rdx
 	pop rbx
@@ -33,6 +26,23 @@ _start:
 	mov r15, [x0]
 	call _print
 	pop r15
+	push rax
+	push rbx
+	push rdx
+
+	mov rax, [x0] 
+	mov rdx, 1 
+	add rax, rdx
+	push rax
+
+
+	pop rax
+	mov [x0], rax
+
+	pop rdx
+	pop rbx
+	pop rax
+
 
 exit:
 mov rax, 60
