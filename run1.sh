@@ -1,13 +1,13 @@
 #! /bin/sh
 
-nasm -f elf64 source/$1.asm -o $1.o
+nasm -f elf64 $1.asm -o $1.o
 
 if [ $? -ne 0 ];  then
     echo "Not compiling $1"
     exit 1
 fi
 
-nasm -f elf64 print_digit.asm  -o print.o
+nasm -f elf64 source/print_digit.asm  -o print.o
 
 if [ $? -ne 0 ]; then
     echo "Not compiling print"
