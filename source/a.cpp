@@ -534,33 +534,33 @@ int main(){
 
     //tokenezation output
 
-    //     for(size_t y = 0 ;  y < token_tree.size(); ++y){
-    //         std::string type_tok_cout = "";
-    //         if( token_tree[y].t == token_t::varb)
-    //             type_tok_cout = "varb";
-    //         if( token_tree[y].t == token_t::par)
-    //             type_tok_cout = "par";
-    //         if( token_tree[y].t == token_t::oper1)
-    //             type_tok_cout = "oper1";
-    //         if( token_tree[y].t == token_t::oper2)
-    //             type_tok_cout = "oper2";
-    //         if( token_tree[y].t == token_t::num)
-    //             type_tok_cout = "num";
-    //         if( token_tree[y].t == token_t::key_w)
-    //             type_tok_cout = "key_w";
-    //         if( token_tree[y].t == token_t::eq)
-    //             type_tok_cout = "eq";
-    //         if( token_tree[y].t == token_t::neg)
-    //             type_tok_cout = "neg";
-    //         std::cout<<type_tok_cout<<'\t';
-    //     }
-    //     std::cout<<'\n';
-    //     for(size_t y = 0 ;  y < token_tree.size(); ++y){
-    //         std::cout<< token_tree[y].str<<"\t";
-    //     }
-    //     std::cout<<'\n';
-    //     token_tree.clear();
-    // }
+        // for(size_t y = 0 ;  y < token_tree.size(); ++y){
+        //     std::string type_tok_cout = "";
+        //     if( token_tree[y].t == token_t::varb)
+        //         type_tok_cout = "varb";
+        //     if( token_tree[y].t == token_t::par)
+        //         type_tok_cout = "par";
+        //     if( token_tree[y].t == token_t::oper1)
+        //         type_tok_cout = "oper1";
+        //     if( token_tree[y].t == token_t::oper2)
+        //         type_tok_cout = "oper2";
+        //     if( token_tree[y].t == token_t::num)
+        //         type_tok_cout = "num";
+        //     if( token_tree[y].t == token_t::key_w)
+        //         type_tok_cout = "key_w";
+        //     if( token_tree[y].t == token_t::eq)
+        //         type_tok_cout = "eq";
+        //     if( token_tree[y].t == token_t::neg)
+        //         type_tok_cout = "neg";
+        //     std::cout<<type_tok_cout<<'\t';
+        // }
+        // std::cout<<'\n';
+        // for(size_t y = 0 ;  y < token_tree.size(); ++y){
+        //     std::cout<< token_tree[y].str<<"\t";
+        // }
+        std::cout<<'\n';
+        token_tree.clear();
+    }
 
 
 //writeing in file
