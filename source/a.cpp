@@ -558,7 +558,7 @@ int main(){
         // for(size_t y = 0 ;  y < token_tree.size(); ++y){
         //     std::cout<< token_tree[y].str<<"\t";
         // }
-        std::cout<<'\n';
+        // std::cout<<'\n';
         token_tree.clear();
     }
 
