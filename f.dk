@@ -1,4 +1,4 @@
-x = 0;
-c = 9;
-x = c*8-(9--x+7*9*(4+4));
-print x;
+f = 10;
+while( f  eq 10 and f < 12){
+    print x;
+}

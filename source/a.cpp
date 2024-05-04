@@ -23,7 +23,9 @@ enum class token_t{
     neg, // for 1 unar -
     varb, // variable
     par, // ()
-    key_w, // key words like 'if','and', 'or','eq','while'
+    logic, // for and , or
+    cond, // for > < and eq
+    key_w, // key words like 'if', 'print','while'
     oper1, // + -
     oper2, // * /
     eq // only for =
@@ -393,6 +395,22 @@ int main(){
 
     for(size_t i = 0; i < tree.size(); ++i){
         for(size_t j = 0; j < tree[i].size() ; ++j){
+            if( tree[i][j] == "and" || tree[i][j] == "or"){
+                token o;
+                o.t = token_t::logic;
+                o.str = tree[i][j];
+                token_tree.push_back(o);
+                continue;
+
+            }
+            if( tree[i][j] == ">" || tree[i][j] == "<" || tree[i][j] == "eq"){
+                token o;
+                o.t = token_t::logic;
+                o.str = tree[i][j];
+                token_tree.push_back(o);
+                continue;
+
+            }
             if(f(tree[i][j])){
                 token o;
                 o.t = token_t::key_w;
@@ -468,30 +486,32 @@ int main(){
     // for assign
             
         // only for 3 sized token_tree
-        if( token_tree.size() == 3){
-            if( token_tree[2].t == token_t::varb || token_tree[2].t == token_t::num ){
-                if( token_tree[2].t == token_t::varb){
-                    if (myset.find(token_tree[2].str) != myset.end() ){
-                        code+="\tpush rax\n\tmov rax, ["+token_tree[2].str+'0'+"]\n\tmov ["+token_tree[0].str+'0'+"], rax\n\tpop rax\n\n";
+        if( token_tree[0].t == token_t::varb){
+            if( token_tree.size() == 3){
+                if( token_tree[2].t == token_t::varb || token_tree[2].t == token_t::num ){
+                    if( token_tree[2].t == token_t::varb){
+                        if (myset.find(token_tree[2].str) != myset.end() ){
+                            code+="\tpush rax\n\tmov rax, ["+token_tree[2].str+'0'+"]\n\tmov ["+token_tree[0].str+'0'+"], rax\n\tpop rax\n\n";
+                        }else{
+                            std::cout<<"Unknown var "<<token_tree[2].str<<"\n";
+                        }
                     }else{
-                        std::cout<<"Unknown var "<<token_tree[2].str<<"\n";
+                        code+="\tpush rax\n\tmov rax, "+token_tree[2].str+"\n\tmov ["+token_tree[0].str+'0'+"], rax\n\tpop rax\n\n";
                     }
                 }else{
-                    code+="\tpush rax\n\tmov rax, "+token_tree[2].str+"\n\tmov ["+token_tree[0].str+'0'+"], rax\n\tpop rax\n\n";
+                    std::cout<<"trying to assign something else than var or num\n";
+                    return 1;
                 }
-            }else{
-                std::cout<<"trying to assign something else than var or num\n";
-                return 1;
-            }
-        }else if (token_tree.size() > 3){
-            code += "\tpush rax\n\tpush rbx\n\tpush rdx\n\n";
-            node* node_link = mathh(token_tree,blocks_numbers,0);
-            code+= handling_tree(node_link);
-            code+= "\tpop rax\n\tmov ["+token_tree[0].str+"0], rax\n\n" ;
-            blocks_numbers.clear();
-            code += "\tpop rdx\n\tpop rbx\n\tpop rax\n\n";
-            delete node_link;
-        } 
+            }else if (token_tree.size() > 3){
+                code += "\tpush rax\n\tpush rbx\n\tpush rdx\n\n";
+                node* node_link = mathh(token_tree,blocks_numbers,0);
+                code+= handling_tree(node_link);
+                code+= "\tpop rax\n\tmov ["+token_tree[0].str+"0], rax\n\n" ;
+                blocks_numbers.clear();
+                code += "\tpop rdx\n\tpop rbx\n\tpop rax\n\n";
+                delete node_link;
+            } 
+        }
         if(token_tree[0].t == token_t::key_w ){
             std::stack<std::string> st; // for nested loops
             if(token_tree[0].str == "print"){
@@ -501,27 +521,9 @@ int main(){
                     code+="\n\n\tpush r15\n\tmov r15, "+token_tree[1].str+"\n\tcall _print\n\tpop r15\n";
                 }
             }
-            // if (token_tree[0].str == "while"){
-            //     code+= "\tloop"+std::to_string(loop)+":\n";
-            //     if(token_tree.size()  == 6){
-            //         if(token_tree[3].str == "eq"){
-            //             std::string arg1;
-            //             std::string arg2;
-            //             if( token_tree[2].t == token_t::varb ){
-            //                 arg1 = "["+token_tree[2].str+"0]";
-            //             }else{
-            //                 arg1 = token_tree[2].str;
-            //             }
-            //             if( token_tree[4].t == token_t::varb ){
-            //                 arg2 = "["+token_tree[4].str+"0]";
-            //             }else{
-            //                 arg2 = token_tree[4].str;
-            //             }
-            //             cmp
-            //         }
-            //     }
-            //     loop++;
-            // }
+            if (token_tree[0].str == "while"){
+                
+            }
         }
     
 
@@ -534,31 +536,35 @@ int main(){
 
     //tokenezation output
 
-        // for(size_t y = 0 ;  y < token_tree.size(); ++y){
-        //     std::string type_tok_cout = "";
-        //     if( token_tree[y].t == token_t::varb)
-        //         type_tok_cout = "varb";
-        //     if( token_tree[y].t == token_t::par)
-        //         type_tok_cout = "par";
-        //     if( token_tree[y].t == token_t::oper1)
-        //         type_tok_cout = "oper1";
-        //     if( token_tree[y].t == token_t::oper2)
-        //         type_tok_cout = "oper2";
-        //     if( token_tree[y].t == token_t::num)
-        //         type_tok_cout = "num";
-        //     if( token_tree[y].t == token_t::key_w)
-        //         type_tok_cout = "key_w";
-        //     if( token_tree[y].t == token_t::eq)
-        //         type_tok_cout = "eq";
-        //     if( token_tree[y].t == token_t::neg)
-        //         type_tok_cout = "neg";
-        //     std::cout<<type_tok_cout<<'\t';
-        // }
-        // std::cout<<'\n';
-        // for(size_t y = 0 ;  y < token_tree.size(); ++y){
-        //     std::cout<< token_tree[y].str<<"\t";
-        // }
-        // std::cout<<'\n';
+        for(size_t y = 0 ;  y < token_tree.size(); ++y){
+            std::string type_tok_cout = "";
+            if( token_tree[y].t == token_t::varb)
+                type_tok_cout = "varb";
+            if( token_tree[y].t == token_t::par)
+                type_tok_cout = "par";
+            if( token_tree[y].t == token_t::oper1)
+                type_tok_cout = "oper1";
+            if( token_tree[y].t == token_t::oper2)
+                type_tok_cout = "oper2";
+            if( token_tree[y].t == token_t::num)
+                type_tok_cout = "num";
+            if( token_tree[y].t == token_t::key_w)
+                type_tok_cout = "key_w";
+            if( token_tree[y].t == token_t::eq)
+                type_tok_cout = "eq";
+            if( token_tree[y].t == token_t::neg)
+                type_tok_cout = "neg";
+            if( token_tree[y].t == token_t::logic)
+                type_tok_cout = "logic";
+            if( token_tree[y].t == token_t::cond)
+                type_tok_cout = "cond";
+            std::cout<<type_tok_cout<<'\t';
+        }
+        std::cout<<'\n';
+        for(size_t y = 0 ;  y < token_tree.size(); ++y){
+            std::cout<< token_tree[y].str<<"\t";
+        }
+        std::cout<<'\n';
         token_tree.clear();
     }
 
