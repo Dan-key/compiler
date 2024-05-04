@@ -405,7 +405,7 @@ int main(){
             }
             if( tree[i][j] == ">" || tree[i][j] == "<" || tree[i][j] == "eq"){
                 token o;
-                o.t = token_t::logic;
+                o.t = token_t::cond;
                 o.str = tree[i][j];
                 token_tree.push_back(o);
                 continue;
