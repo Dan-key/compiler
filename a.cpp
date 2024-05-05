@@ -23,7 +23,8 @@ enum class token_t{
     neg, // for 1 unar -
     varb, // variable
     par, // ()
-    logic, // for and , or
+    logic1, // for or
+    logic2, // for and
     cond, // for > < and eq
     key_w, // key words like 'if', 'print','while'
     oper1, // + -
@@ -93,7 +94,7 @@ node* mathh(std::vector<token> a,std::vector<node*> &b, size_t c){
                     for(size_t y =  in_par+1; y < i; ++y){
                         d.push_back(a[y]);
                     }
-                    node* f = mathh(d,b, in_par+c);
+                    node* f = mathh(d,b, in_par+c+1);
                     ret = f;
                     for(size_t y =  in_par+c; y <= in_par+d.size()+c+1; ++y){
                         b[y] =f;
@@ -153,7 +154,6 @@ node* mathh(std::vector<token> a,std::vector<node*> &b, size_t c){
                 n->right = b[y+c+1];
                 node* tret = b[y+c+1];
                 for(size_t uh = 0; uh < b.size(); ++uh){
-                    
                     if(b[uh] == tret){
                         b[uh] = n;
                     }
@@ -161,7 +161,6 @@ node* mathh(std::vector<token> a,std::vector<node*> &b, size_t c){
             }else{
                 n->ir = a[y+1];
                 b[y+1+c] = n;
-
             }
             b[y+c] = n;
             n->oper = a[y].str;
@@ -205,7 +204,114 @@ node* mathh(std::vector<token> a,std::vector<node*> &b, size_t c){
             size_t isos_bib = 0;
         }
     }
-    
+    for( size_t y = 0; y< a.size(); ++y){
+        if(b[y+c] != nullptr){
+            continue;
+        }
+        if(a[y].t == token_t::cond){
+            node* n = new node;
+            if(b[y+c-1] != nullptr){
+                n->left = b[y+c-1];
+                node* tret = b[y+c-1];
+                for(size_t uh = 0; uh < b.size(); ++uh){
+                    if(b[uh] == tret){
+                        b[uh] = n;
+                    }
+                }
+            }else{
+                n->il = a[y-1];
+                b[y+c-1] = n;
+            }
+            if(b[y+c+1] != nullptr){
+                n->right = b[y+c+1];
+                node* tret = b[y+c+1];
+                for(size_t uh = 0; uh < b.size(); ++uh){
+                    if(b[uh] == tret){
+                        b[uh] = n;
+                    }
+                }
+            }else{
+                n->ir = a[y+1];
+                b[y+1+c] = n;
+            }
+            n->oper = a[y].str;
+            ret =n;
+            b[y+c] = n;
+            size_t isos_bib = 0;
+        }  
+    }
+    for( size_t y = 0; y< a.size(); ++y){
+        if(b[y+c] != nullptr){
+            continue;
+        }
+        if(a[y].t == token_t::logic2){
+            node* n = new node;
+            if(b[y+c-1] != nullptr){
+                n->left = b[y+c-1];
+                node* tret = b[y+c-1];
+                for(size_t uh = 0; uh < b.size(); ++uh){
+                    if(b[uh] == tret){
+                        b[uh] = n;
+                    }
+                }
+            }else{
+                n->il = a[y-1];
+                b[y+c-1] = n;
+            }
+            if(b[y+c+1] != nullptr){
+                n->right = b[y+c+1];
+                node* tret = b[y+c+1];
+                for(size_t uh = 0; uh < b.size(); ++uh){
+                    if(b[uh] == tret){
+                        b[uh] = n;
+                    }
+                }
+            }else{
+                n->ir = a[y+1];
+                b[y+1+c] = n;
+            }
+            n->oper = a[y].str;
+            ret =n;
+            b[y+c] = n;
+            size_t isos_bib = 0;
+        }
+    }
+    for( size_t y = 0; y< a.size(); ++y){
+        if(b[y+c] != nullptr){
+            continue;
+        }
+        if(a[y].t == token_t::logic1){
+            node* n = new node;
+            if(b[y+c-1] != nullptr){
+                n->left = b[y+c-1];
+                node* tret = b[y+c-1];
+                for(size_t uh = 0; uh < b.size(); ++uh){
+                    if(b[uh] == tret){
+                        b[uh] = n;
+                    }
+                }
+            }else{
+                n->il = a[y-1];
+                b[y+c-1] = n;
+            }
+            if(b[y+c+1] != nullptr){
+                n->right = b[y+c+1];
+                node* tret = b[y+c+1];
+                for(size_t uh = 0; uh < b.size(); ++uh){
+                    if(b[uh] == tret){
+                        b[uh] = n;
+                    }
+                }
+            }else{
+                n->ir = a[y+1];
+                b[y+1+c] = n;
+            }
+            n->oper = a[y].str;
+            ret =n;
+            b[y+c] = n;
+            size_t isos_bib = 0;
+        }
+    }
             
             
         
@@ -349,7 +455,7 @@ int main(){
     char s;
     std::string code="";
     size_t loop = 0; // for making unique name in loops
-
+    std::stack<std::string> st; // for nested loops
 //breaking into blocks
 
     while(file.get(s)){
@@ -394,10 +500,22 @@ int main(){
 
 
     for(size_t i = 0; i < tree.size(); ++i){
+        if (tree[i].empty()){
+            token_tree.clear();
+            continue;
+        }
         for(size_t j = 0; j < tree[i].size() ; ++j){
-            if( tree[i][j] == "and" || tree[i][j] == "or"){
+            if( tree[i][j] == "and" ){
                 token o;
-                o.t = token_t::logic;
+                o.t = token_t::logic2;
+                o.str = tree[i][j];
+                token_tree.push_back(o);
+                continue;
+
+            }
+            if( tree[i][j] == "or" ){
+                token o;
+                o.t = token_t::logic1;
                 o.str = tree[i][j];
                 token_tree.push_back(o);
                 continue;
@@ -479,8 +597,7 @@ int main(){
 
 
 
-
-//making code
+    //making code
     std::vector<node*> blocks_numbers;// vector to assign for each token their number
     blocks_numbers.resize(token_tree.size()); // obviously it should have the size of token_tree
     // for assign
@@ -512,8 +629,8 @@ int main(){
                 delete node_link;
             } 
         }
+        std::string ster = token_tree[0].str;
         if(token_tree[0].t == token_t::key_w ){
-            std::stack<std::string> st; // for nested loops
             if(token_tree[0].str == "print"){
                 if( token_tree[1].t == token_t::varb){
                     code+="\n\n\tpush r15\n\tmov r15, ["+token_tree[1].str+"0]\n\tcall _print\n\tpop r15\n";
@@ -522,7 +639,16 @@ int main(){
                 }
             }
             if (token_tree[0].str == "while"){
-                
+                code += "\tpush rax\n\tpush rbx\n\tpush rdx\n\n";
+                std::vector<token> cond_vector;
+                for(size_t lll = 2; lll  < token_tree.size() -1; ++lll)
+                    cond_vector.push_back(token_tree[lll]);
+                node* node_link = mathh(token_tree,blocks_numbers,0);
+                //code+= handling_tree(node_link);
+               // code+= "\tpop rax\n\tmov ["+token_tree[0].str+"0], rax\n\n" ;
+                blocks_numbers.clear();
+                code += "\tpop rdx\n\tpop rbx\n\tpop rax\n\n";
+                delete node_link;
             }
         }
     
@@ -554,8 +680,10 @@ int main(){
                 type_tok_cout = "eq";
             if( token_tree[y].t == token_t::neg)
                 type_tok_cout = "neg";
-            if( token_tree[y].t == token_t::logic)
-                type_tok_cout = "logic";
+            if( token_tree[y].t == token_t::logic2)
+                type_tok_cout = "logic2";
+            if( token_tree[y].t == token_t::logic1)
+                type_tok_cout = "logic1";
             if( token_tree[y].t == token_t::cond)
                 type_tok_cout = "cond";
             std::cout<<type_tok_cout<<'\t';
@@ -586,7 +714,7 @@ int main(){
 
 
 
-//output in terminal
+//output in terminal blocks
 
     // for(size_t i = 0; i < tree.size(); ++i){
     //     for(size_t j = 0; j < tree[i].size() ; ++j){
