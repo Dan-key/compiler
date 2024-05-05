@@ -1,4 +1,4 @@
 f = 10;
-while( f  eq 10 and f < 12){
+while( (f  eq 10 and f < 12) or ( f > 1)){
     print x;
 }
