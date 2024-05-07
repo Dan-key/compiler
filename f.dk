@@ -1,4 +1,14 @@
-f = 10;
- if ( f neq 10){
-    print 10;
- }
+x = 456;
+i = 3;
+y = x/2;
+while(x%2 eq 0){
+    print 2;
+    x = x /2;
+}
+while( i < y ){
+    while (x % i eq 0){
+        print i;
+        x = x /i;
+    }
+    i = i +2;
+}

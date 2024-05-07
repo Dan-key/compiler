@@ -4,6 +4,8 @@
 #include <vector>
 #include <set>
 #include <stack>
+#include <chrono>
+static int counter_for_conditions = 0;
 bool f(std::string str){
     if (str == "if" || str == "while" || str == "or" || str == "and" || str == "neq"  || str == "eq" || str == "<" || str == ">" || str == "print"){
         return true;
@@ -398,8 +400,26 @@ std::string handling_tree(node* a){
             
         }else if( a->oper == "/"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rax\n\n\n";
-        }else{
+        }else if(a->oper == "%"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rdx\n\n\n";
+        }else if(a->oper == "eq"){
+            ret+="\tcmp rax, rdx\n\tje true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "neq"){
+            ret+="\tcmp rax, rdx\n\tjne true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == ">"){
+            ret+="\tcmp rax, rdx\n\tjg true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "<"){
+            ret+="\tcmp rax, rdx\n\tjl true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "and"){
+            ret+="\tand rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "or"){
+            ret+="\tor rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
         }
     }else if( a->right == nullptr && a->left != nullptr){
         ret+= handling_tree(a->left);
@@ -418,15 +438,33 @@ std::string handling_tree(node* a){
             
         }else if( a->oper == "/"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rax\n\n\n";
-        }else{
+        }else if(a->oper == "%"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rdx\n\n\n";
+        }else if(a->oper == "eq"){
+            ret+="\tcmp rax, rdx\n\tje true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "neq"){
+            ret+="\tcmp rax, rdx\n\tjne true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == ">"){
+            ret+="\tcmp rax, rdx\n\tjg true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "<"){
+            ret+="\tcmp rax, rdx\n\tjl true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "and"){
+            ret+="\tand rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "or"){
+            ret+="\tor rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
         }
     }else{
         ret+= handling_tree(a->right);
         ret+= handling_tree(a->left);
         ret+= "\tpop rax\n";
         ret+= "\tpop rdx\n";
-        if( a->oper == "*"){
+       if( a->oper == "*"){
             ret+="\timul rdx\n\tpush rax\n\n\n";
         }else if( a->oper == "+"){
             ret+="\tadd rax, rdx\n\tpush rax\n\n\n";
@@ -435,8 +473,26 @@ std::string handling_tree(node* a){
             
         }else if( a->oper == "/"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rax\n\n\n";
-        }else{
+        }else if(a->oper == "%"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rdx\n\n\n";
+        }else if(a->oper == "eq"){
+            ret+="\tcmp rax, rdx\n\tje true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "neq"){
+            ret+="\tcmp rax, rdx\n\tjne true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == ">"){
+            ret+="\tcmp rax, rdx\n\tjg true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "<"){
+            ret+="\tcmp rax, rdx\n\tjl true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "and"){
+            ret+="\tand rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "or"){
+            ret+="\tor rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
         }
     }
     return ret;
@@ -462,6 +518,8 @@ std::vector<token> token_tree;
 
 int main(){
 //starting programm
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     std::ifstream file("f.dk"); // my code file
     std::ofstream output_file("output.asm");
@@ -519,6 +577,8 @@ int main(){
 
     for(size_t i = 0; i < tree.size(); ++i){
         if (tree[i].empty()){
+            code += st.top();
+            st.pop();
             token_tree.clear();
             continue;
         }
@@ -539,7 +599,7 @@ int main(){
                 continue;
 
             }
-            if( tree[i][j] == ">" || tree[i][j] == "<" || tree[i][j] == "eq"){
+            if( tree[i][j] == ">" || tree[i][j] == "<" || tree[i][j] == "eq" || tree[i][j] == "neq"){
                 token o;
                 o.t = token_t::cond;
                 o.str = tree[i][j];
@@ -614,7 +674,6 @@ int main(){
 
 
 
-
     //making code
     std::vector<node*> blocks_numbers;// vector to assign for each token their number
     blocks_numbers.resize(token_tree.size()); // obviously it should have the size of token_tree
@@ -658,13 +717,25 @@ int main(){
             }
             if (token_tree[0].str == "while"){
                 code += "\tpush rax\n\tpush rbx\n\tpush rdx\n\n";
-                std::vector<token> cond_vector;
-                for(size_t lll = 2; lll  < token_tree.size() -1; ++lll)
-                    cond_vector.push_back(token_tree[lll]);
+                code+="\twhile"+std::to_string(loop)+":\n\t";
                 node* node_link = mathh(token_tree,blocks_numbers,0);
-                //code+= handling_tree(node_link);
-               // code+= "\tpop rax\n\tmov ["+token_tree[0].str+"0], rax\n\n" ;
+                code+= handling_tree(node_link);
+                code+= "\tpop rax\n\tcmp rax,1\n\tjne end_loop"+std::to_string(loop)+"\n\n" ;
+                st.push("\tjmp while"+std::to_string(loop)+"\n\tend_loop"+std::to_string(loop)+":\n\n");
                 blocks_numbers.clear();
+                ++loop;
+                code += "\tpop rdx\n\tpop rbx\n\tpop rax\n\n";
+                delete node_link;
+            }
+            if (token_tree[0].str == "if"){
+                code += "\tpush rax\n\tpush rbx\n\tpush rdx\n\n";
+                code+="\tif"+std::to_string(loop)+":\n\t";
+                node* node_link = mathh(token_tree,blocks_numbers,0);
+                code+= handling_tree(node_link);
+                code+= "\tpop rax\n\tcmp rax,1\n\tjne end_loop"+std::to_string(loop)+"\n\n" ;
+                st.push("\tend_loop"+std::to_string(loop)+":\n\n");
+                blocks_numbers.clear();
+                ++loop;
                 code += "\tpop rdx\n\tpop rbx\n\tpop rax\n\n";
                 delete node_link;
             }
@@ -742,4 +813,12 @@ int main(){
     // }
     file.close();
     output_file.close();
+    auto stop = std::chrono::high_resolution_clock::now();
+
+    // Calculate the duration
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+    // Output the duration
+    std::cout << "Execution time: " << duration.count() << " microseconds" << std::endl;
+
 }
