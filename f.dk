@@ -1,5 +1,4 @@
 f = 10;
-x = (9)-(7+(9+3)*8);
-while( (f  eq 10*3+4 and f < 12)){
-    print x;
-}
+ if ( f neq 10){
+    print 10;
+ }

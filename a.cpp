@@ -358,8 +358,26 @@ std::string handling_tree(node* a){
             
         }else if( a->oper == "/"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rax\n\n\n";
-        }else{
+        }else if(a->oper == "%"){
             ret+="\tmov rbx, rdx\n\txor rdx, rdx\n\tidiv rbx\n\tpush rdx\n\n\n";
+        }else if(a->oper == "eq"){
+            ret+="\tcmp rax, rdx\n\tje true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "neq"){
+            ret+="\tcmp rax, rdx\n\tjne true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == ">"){
+            ret+="\tcmp rax, rdx\n\tjg true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "<"){
+            ret+="\tcmp rax, rdx\n\tjl true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "and"){
+            ret+="\tand rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
+        }else if(a->oper == "or"){
+            ret+="\tor rax, rdx\n\tjnz true"+std::to_string(counter_for_conditions)+"\n\tpush 0\n\tjmp end"+std::to_string(counter_for_conditions)+"\n\ttrue"+std::to_string(counter_for_conditions)+":\n\t\tpush 1\n\tend"+std::to_string(counter_for_conditions)+":\n";
+            ++counter_for_conditions;
         }
 
         
@@ -662,37 +680,37 @@ int main(){
 
     //tokenezation output
 
-        for(size_t y = 0 ;  y < token_tree.size(); ++y){
-            std::string type_tok_cout = "";
-            if( token_tree[y].t == token_t::varb)
-                type_tok_cout = "varb";
-            if( token_tree[y].t == token_t::par)
-                type_tok_cout = "par";
-            if( token_tree[y].t == token_t::oper1)
-                type_tok_cout = "oper1";
-            if( token_tree[y].t == token_t::oper2)
-                type_tok_cout = "oper2";
-            if( token_tree[y].t == token_t::num)
-                type_tok_cout = "num";
-            if( token_tree[y].t == token_t::key_w)
-                type_tok_cout = "key_w";
-            if( token_tree[y].t == token_t::eq)
-                type_tok_cout = "eq";
-            if( token_tree[y].t == token_t::neg)
-                type_tok_cout = "neg";
-            if( token_tree[y].t == token_t::logic2)
-                type_tok_cout = "logic2";
-            if( token_tree[y].t == token_t::logic1)
-                type_tok_cout = "logic1";
-            if( token_tree[y].t == token_t::cond)
-                type_tok_cout = "cond";
-            std::cout<<type_tok_cout<<'\t';
-        }
-        std::cout<<'\n';
-        for(size_t y = 0 ;  y < token_tree.size(); ++y){
-            std::cout<< token_tree[y].str<<"\t";
-        }
-        std::cout<<'\n';
+        // for(size_t y = 0 ;  y < token_tree.size(); ++y){
+        //     std::string type_tok_cout = "";
+        //     if( token_tree[y].t == token_t::varb)
+        //         type_tok_cout = "varb";
+        //     if( token_tree[y].t == token_t::par)
+        //         type_tok_cout = "par";
+        //     if( token_tree[y].t == token_t::oper1)
+        //         type_tok_cout = "oper1";
+        //     if( token_tree[y].t == token_t::oper2)
+        //         type_tok_cout = "oper2";
+        //     if( token_tree[y].t == token_t::num)
+        //         type_tok_cout = "num";
+        //     if( token_tree[y].t == token_t::key_w)
+        //         type_tok_cout = "key_w";
+        //     if( token_tree[y].t == token_t::eq)
+        //         type_tok_cout = "eq";
+        //     if( token_tree[y].t == token_t::neg)
+        //         type_tok_cout = "neg";
+        //     if( token_tree[y].t == token_t::logic2)
+        //         type_tok_cout = "logic2";
+        //     if( token_tree[y].t == token_t::logic1)
+        //         type_tok_cout = "logic1";
+        //     if( token_tree[y].t == token_t::cond)
+        //         type_tok_cout = "cond";
+        //     std::cout<<type_tok_cout<<'\t';
+        // }
+        // std::cout<<'\n';
+        // for(size_t y = 0 ;  y < token_tree.size(); ++y){
+        //     std::cout<< token_tree[y].str<<"\t";
+        // }
+        // std::cout<<'\n';
         token_tree.clear();
     }
 
