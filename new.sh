@@ -6,7 +6,7 @@ if [ $? -ne 0 ];  then
     exit 1
 fi
 
-nasm -f elf64 print_digit.asm  -o print.o
+nasm -f elf64 source/print_digit.asm  -o print.o
 
 if [ $? -ne 0 ]; then
     echo "Not compiling print"

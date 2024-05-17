@@ -7,13 +7,8 @@ section .data
 section .text
 _start:
 	push rax
-	mov rax, 456
+	mov rax, 123456789066678678
 	mov [x0], rax
-	pop rax
-
-	push rax
-	mov rax, 3
-	mov [i0], rax
 	pop rax
 
 	push rax
@@ -33,6 +28,11 @@ _start:
 
 	pop rdx
 	pop rbx
+	pop rax
+
+	push rax
+	mov rax, 3
+	mov [i0], rax
 	pop rax
 
 	push rax
@@ -99,7 +99,7 @@ _start:
 
 	while1:
 		mov rax, [i0] 
-	mov rdx, [y0] 
+	mov rdx, [x0] 
 	cmp rax, rdx
 	jl true1
 	push 0
@@ -193,6 +193,12 @@ _start:
 	jmp while1
 	end_loop1:
 
+
+
+	push r15
+	mov r15, [i0]
+	call _print
+	pop r15
 
 exit:
 mov rax, 60
