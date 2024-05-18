@@ -27,7 +27,7 @@ enum class token_t{
     par, // ()
     logic1, // for or
     logic2, // for and
-    cond, // for > < and eq
+    cond, // for > < eq neq
     key_w, // key words like 'if', 'print','while'
     oper1, // + -
     oper2, // * /
